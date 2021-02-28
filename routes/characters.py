@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+from random import randrange
 import requests
 
 characters = Blueprint('characters', __name__)
@@ -23,6 +24,33 @@ def findCharacter():
         '?status={status}&gender={gender}'.format(
             status=status or '', gender=gender or '')
 
-    r = requests.get(url)
+    try:
+        r = requests.get(url)
+        return r.json()
+    except:
+        return {"error": "The request to the external api failed, please try again"}, 500
 
-    return r.json()
+
+@characters.route('/characters/random')
+def randomCharacter():
+    try:
+        # At this moment, there are 671 characthers defined in the api.
+        # The character ID's ranges from 1 to 671.
+
+        # Makes an initial request to find out how many characters there are
+        request = requests.get(baseUrl)
+
+        response = request.json()['info']
+
+        # Extracts the current count of all characters
+        count = request.json()['info']['count']
+
+        # Creates a number that ranges from 1 to the current count of characters
+        randomCharacterId = randrange(count)
+
+        url = baseUrl + '/{id}'.format(id=randomCharacterId)
+
+        character = requests.get(url)
+        return character.json()
+    except:
+        return {"error": "The request to the external api failed, please try again"}, 500
