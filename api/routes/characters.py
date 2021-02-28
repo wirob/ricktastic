@@ -34,8 +34,7 @@ def findCharacter():
 @characters.route('/characters/random')
 def randomCharacter():
     try:
-        # At this moment, there are 671 characthers defined in the api.
-        # The character ID's ranges from 1 to 671.
+        # There is a total of 671 characters sorted by id.
 
         # Makes an initial request to find out how many characters there are
         request = requests.get(baseUrl)
