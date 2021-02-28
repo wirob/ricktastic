@@ -7,7 +7,7 @@ characters = Blueprint('characters', __name__)
 baseUrl = 'https://rickandmortyapi.com/api/character'
 
 
-@characters.route('/characters')
+@characters.route('/api/characters')
 def findCharacter():
     status = request.args.get('status')
     gender = request.args.get('gender')
@@ -31,15 +31,13 @@ def findCharacter():
         return {"error": "The request to the external api failed, please try again"}, 500
 
 
-@characters.route('/characters/random')
+@characters.route('/api/characters/random')
 def randomCharacter():
     try:
         # There is a total of 671 characters sorted by id.
 
         # Makes an initial request to find out how many characters there are
         request = requests.get(baseUrl)
-
-        response = request.json()['info']
 
         # Extracts the current count of all characters
         count = request.json()['info']['count']
