@@ -1,7 +1,9 @@
 from flask import Flask
 
-from views.home import home
+from routes.index import index
+from routes.characters import characters
 
 app = Flask(__name__)
 
-app.register_blueprint(home)
+app.register_blueprint(index)
+app.register_blueprint(characters)
