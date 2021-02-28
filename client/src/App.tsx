@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Button,
   FormControl,
@@ -13,9 +13,18 @@ import {
 const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     marginTop: '10%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  searchParams: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  searchButtonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: theme.spacing(2),
   },
   formControl: {
     margin: theme.spacing(1),
@@ -23,37 +32,89 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }))
 
+type Event = React.ChangeEvent<{
+  name?: string | undefined
+  value: unknown
+}>
+
+type Status = 'Alive' | 'Dead' | 'unknown' | ''
+type Gender = 'Female' | 'Male' | 'Genderless' | 'unknown' | ''
+
+interface SearchParams {
+  status: Status
+  gender: Gender
+}
+
 const genders = ['Female', 'Male', 'Genderless', 'unknown']
 const statuses = ['Alive', 'Dead', 'unknown']
 
-const SearchField: React.FC = () => {
+interface SearchFieldProps {
+  handleQuery: (params: SearchParams) => void
+}
+
+const SearchField: React.FC<SearchFieldProps> = (props) => {
+  const { handleQuery } = props
   const classes = useStyles()
+
+  const [gender, setGender] = useState<Gender>('')
+  const [status, setStatus] = useState<Status>('')
+
+  const handleGenderChange = (event: Event) => {
+    setGender(event.target.value as Gender)
+  }
+
+  const handleStatusChange = (event: Event) => {
+    setStatus(event.target.value as Status)
+  }
+
+  const handleClick = () => {
+    handleQuery({ gender, status })
+  }
 
   return (
     <div className={classes.wrapper}>
-      <TextField label="Name" variant="outlined" />
-      <FormControl className={classes.formControl}>
-        <InputLabel>Gender</InputLabel>
-        <Select>
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {genders.map((gender) => (
-            <MenuItem value={gender}>{gender}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel>Status</InputLabel>
-        <Select>
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {statuses.map((status) => (
-            <MenuItem value={status}>{status}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <div className={classes.searchParams}>
+        <TextField label="Name" variant="outlined" />
+        <FormControl className={classes.formControl}>
+          <InputLabel id="gender-select-label">Gender</InputLabel>
+          <Select
+            labelId="gender-select-label"
+            value={gender}
+            onChange={handleGenderChange}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {genders.map((gender) => (
+              <MenuItem key={gender} value={gender}>
+                {gender}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel id="status-select-label">Status</InputLabel>
+          <Select
+            labelId="status-select-label"
+            value={status}
+            onChange={handleStatusChange}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {statuses.map((status) => (
+              <MenuItem key={status} value={status}>
+                {status}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+      <div className={classes.searchButtonContainer}>
+        <Button onClick={handleClick} color="primary" variant="contained">
+          Search
+        </Button>
+      </div>
     </div>
   )
 }
@@ -61,21 +122,25 @@ const SearchField: React.FC = () => {
 const App: React.FC = () => {
   const classes = useStyles()
 
-  const handleClick = () => {
+  const getRandomCharacter = () => {
     fetch('/api/characters/random')
       .then((res) => res.json())
       .then(console.log)
   }
 
+  const handleQuery = (params: SearchParams) => {
+    console.log(params)
+  }
+
   return (
     <div style={{ width: '100%' }}>
       <div className={classes.wrapper}>
-        <Button variant="contained" color="secondary" onClick={handleClick}>
+        <Button variant="contained" color="secondary" onClick={getRandomCharacter}>
           Get a random character
         </Button>
       </div>
       <div>or</div>
-      <SearchField />
+      <SearchField handleQuery={handleQuery} />
     </div>
   )
 }
