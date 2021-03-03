@@ -9,6 +9,7 @@ baseUrl = 'https://rickandmortyapi.com/api/character'
 
 @characters.route('/api/characters')
 def findCharacter():
+    name = request.args.get('name')
     status = request.args.get('status')
     gender = request.args.get('gender')
 
@@ -21,8 +22,8 @@ def findCharacter():
             return {"error": "you need to specify a correct gender"}, 400
 
     url = baseUrl + \
-        '?status={status}&gender={gender}'.format(
-            status=status or '', gender=gender or '')
+        '?name={name}&status={status}&gender={gender}'.format(
+            name=name, status=status or '', gender=gender or '')
 
     try:
         r = requests.get(url)
