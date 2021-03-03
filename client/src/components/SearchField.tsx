@@ -91,57 +91,59 @@ const SearchField: React.FC = () => {
   const handleClick = () => {
     fetch(buildQuery())
       .then((res) => res.json())
-      .then(setCharacters)
+      .then((res) => setCharacters(res.results))
   }
 
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.searchParams}>
-        <TextField
-          onChange={(event) => setName(event.target.value)}
-          label="Name"
-          value={name}
-          variant="outlined"
-        />
-        <FormControl className={classes.formControl}>
-          <InputLabel id="gender-select-label">Gender</InputLabel>
-          <Select
-            labelId="gender-select-label"
-            value={gender}
-            onChange={handleGenderChange}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {genders.map((gender) => (
-              <MenuItem key={gender} value={gender}>
-                {gender}
+    <>
+      <div className={classes.wrapper}>
+        <div className={classes.searchParams}>
+          <TextField
+            onChange={(event) => setName(event.target.value)}
+            label="Name"
+            value={name}
+            variant="outlined"
+          />
+          <FormControl className={classes.formControl}>
+            <InputLabel id="gender-select-label">Gender</InputLabel>
+            <Select
+              labelId="gender-select-label"
+              value={gender}
+              onChange={handleGenderChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
               </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl className={classes.formControl}>
-          <InputLabel id="status-select-label">Status</InputLabel>
-          <Select
-            labelId="status-select-label"
-            value={status}
-            onChange={handleStatusChange}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {statuses.map((status) => (
-              <MenuItem key={status} value={status}>
-                {status}
+              {genders.map((gender) => (
+                <MenuItem key={gender} value={gender}>
+                  {gender}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <InputLabel id="status-select-label">Status</InputLabel>
+            <Select
+              labelId="status-select-label"
+              value={status}
+              onChange={handleStatusChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
               </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-      <div className={classes.searchButtonContainer}>
-        <Button onClick={handleClick} color="primary" variant="contained">
-          Search
-        </Button>
+              {statuses.map((status) => (
+                <MenuItem key={status} value={status}>
+                  {status}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+        <div className={classes.searchButtonContainer}>
+          <Button onClick={handleClick} color="primary" variant="contained">
+            Search
+          </Button>
+        </div>
       </div>
       <div>
         {characters &&
@@ -149,7 +151,7 @@ const SearchField: React.FC = () => {
             <CharacterCard character={character} />
           ))}
       </div>
-    </div>
+    </>
   )
 }
 
