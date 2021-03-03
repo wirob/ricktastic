@@ -7,14 +7,17 @@ import {
   Select,
   TextField,
   Theme,
+  Typography,
   makeStyles,
 } from '@material-ui/core'
+import RandomCharacter from './components/RandomCharacter'
 
 const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     marginTop: '10%',
     justifyContent: 'center',
     alignItems: 'center',
+    display: 'flex',
   },
   searchParams: {
     display: 'flex',
@@ -122,24 +125,16 @@ const SearchField: React.FC<SearchFieldProps> = (props) => {
 const App: React.FC = () => {
   const classes = useStyles()
 
-  const getRandomCharacter = () => {
-    fetch('/api/characters/random')
-      .then((res) => res.json())
-      .then(console.log)
-  }
-
   const handleQuery = (params: SearchParams) => {
     console.log(params)
   }
 
   return (
     <div style={{ width: '100%' }}>
+      <RandomCharacter />
       <div className={classes.wrapper}>
-        <Button variant="contained" color="secondary" onClick={getRandomCharacter}>
-          Get a random character
-        </Button>
+        <Typography variant="h4">-------- OR --------</Typography>
       </div>
-      <div>or</div>
       <SearchField handleQuery={handleQuery} />
     </div>
   )
