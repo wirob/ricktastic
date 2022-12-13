@@ -12,21 +12,60 @@ describe('useCharacter', () => {
     jest.resetAllMocks()
   })
 
-  it('has correct data structure', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => useCharacter())
+  describe('returns', () => {
+    it('the correct data structure', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => useCharacter())
 
-    await waitForNextUpdate()
+      await waitForNextUpdate()
 
-    expect(result.current).toHaveProperty('character')
-    expect(result.current).toHaveProperty('isError')
-    expect(result.current).toHaveProperty('isLoading')
+      expect(result.current).toHaveProperty('character')
+      expect(result.current).toHaveProperty('isError')
+      expect(result.current).toHaveProperty('isLoading')
+    })
   })
 
-  it('calls on fetch only once', async () => {
-    const { waitForNextUpdate } = renderHook(() => useCharacter())
+  describe('calls on fetch', () => {
+    test('only once', async () => {
+      const { waitForNextUpdate } = renderHook(() => useCharacter())
 
-    await waitForNextUpdate()
+      await waitForNextUpdate()
 
-    expect(global.fetch).toHaveBeenCalledTimes(1)
+      expect(global.fetch).toHaveBeenCalledTimes(1)
+    })
+
+    describe('with the right url', () => {
+      test('when no param is present', async () => {
+        const { waitForNextUpdate } = renderHook(() => useCharacter())
+
+        await waitForNextUpdate()
+
+        expect(global.fetch).toHaveBeenCalledWith(
+          'https://rickandmortyapi.com/api/character',
+          undefined
+        )
+      })
+
+      test('when param is provided', async () => {
+        const { waitForNextUpdate } = renderHook(() => useCharacter({name: 'morty', status: 'dead'}))
+
+        await waitForNextUpdate()
+
+        expect(global.fetch).toHaveBeenCalledWith(
+          'https://rickandmortyapi.com/api/character/?name=morty&status=dead',
+          undefined
+        )
+      })
+
+      test('fallback when empty object', async () => {
+        const { waitForNextUpdate } = renderHook(() => useCharacter({}))
+
+        await waitForNextUpdate()
+
+        expect(global.fetch).toHaveBeenCalledWith(
+          'https://rickandmortyapi.com/api/character',
+          undefined
+        )
+      })
+    })
   })
 })
