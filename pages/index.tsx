@@ -1,6 +1,6 @@
 import Error from 'next/error'
 import { Typography } from '@mui/material'
-import useCharacter from 'src/hooks/requests'
+import useCharacter from 'hooks/requests'
 
 export default function Home() {
   const { character, isError, isLoading } = useCharacter()

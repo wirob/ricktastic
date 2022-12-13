@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import type { Info, Character } from 'rickmortyapi/dist/interfaces'
-import fetcher from 'src/lib/fetcher'
+import fetcher from 'lib/fetcher'
 
 function useCharacter() {
   const { data, error, isLoading } = useSWR<Info<Character>>(
