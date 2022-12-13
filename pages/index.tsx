@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <div>
-      <Typography variant="h1">hi there!</Typography>
+      <Typography variant="h1">There are currently {character?.info?.count} characters</Typography>
     </div>
   )
 }
