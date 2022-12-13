@@ -1,4 +1,5 @@
 module.exports = {
   testPathIgnorePatterns: ['.next/', 'node_modules/'],
-  moduleDirectories: ['node_modules', 'src']
+  moduleDirectories: ['node_modules', 'src'],
+  testEnvironment: 'jsdom'
 };
